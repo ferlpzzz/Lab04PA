@@ -75,7 +75,7 @@ class Concurso:
         return f"Puntajes registrados para la banda '{nombre_banda}'"
     def listar_bandas(self):
         if not self._bandas:
-            print("No hay bandas inscritas")
+            print("Aun no hay bandas inscritas")
             return
         print(f"\n--- LISTADO DE BANDAS - {self.nombre_concurso} ---")
         for nombre, banda in self._bandas.items():
