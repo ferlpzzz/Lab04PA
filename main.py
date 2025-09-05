@@ -61,24 +61,24 @@ class Concurso:
     def __init__(self, nombre_concurso, fecha):
         self.nombre_concurso = nombre_concurso
         self.fecha = fecha
-        self._bandas = {}
+        self.bandas = {}
     def inscribir_banda(self, banda):
-        if banda.nombre in self._bandas:
+        if banda.nombre in self.bandas:
             raise ValueError(f"Ya existe una banda con el nombre '{banda.nombre}'")
-        self._bandas[banda.nombre] = banda
+        self.bandas[banda.nombre] = banda
         return f"Banda '{banda.nombre}' inscrita exitosamente"
     def registrar_evaluacion(self, nombre_banda, puntajes):
-        if nombre_banda not in self._bandas:
+        if nombre_banda not in self.bandas:
             raise ValueError(f"No existe una banda con el nombre '{nombre_banda}'")
-        banda = self._bandas[nombre_banda]
+        banda = self.bandas[nombre_banda]
         banda.registrar_puntajes(puntajes)
         return f"Puntajes registrados para la banda '{nombre_banda}'"
     def listar_bandas(self):
-        if not self._bandas:
+        if not self.bandas:
             print("Aun no hay bandas inscritas")
             return
         print(f"\n--- LISTADO DE BANDAS - {self.nombre_concurso} ---")
-        for nombre, banda in self._bandas.items():
+        for nombre, banda in self.bandas.items():
             info = banda.mostrar_info()
             if banda.fue_evaluada():
                 print(f"{info}")
@@ -114,9 +114,25 @@ class Concurso:
             return 1
         return 0
 
-
-
-
-
-
-
+    def rankear(self):
+        bandas_evaluadas = []
+        for banda in self.bandas.values():
+            if banda.fue_evaluada():
+                bandas_evaluadas.append(banda)
+        if not bandas_evaluadas:
+            return []
+        n = len(bandas_evaluadas)
+        for i in range(n):
+            for j in range(0, n - i - 1):
+                comparacion = self._comparar_bandas(bandas_evaluadas[j], bandas_evaluadas[j + 1])
+                if comparacion > 0:
+                    bandas_evaluadas[j], bandas_evaluadas[j + 1] = bandas_evaluadas[j + 1], bandas_evaluadas[j]
+        return bandas_evaluadas
+    def mostrar_ranking(self):
+        ranking = self.ranking()
+        if not ranking:
+            print("No hay bandas evaluadas para generar ranking")
+            return
+        print(f"\n--- RANKING FINAL - {self.nombre_concurso} ---")
+        for i, banda in enumerate(ranking, 1):
+            print(f"{i}°. {banda.mostrar_info()}")
