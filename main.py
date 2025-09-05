@@ -92,6 +92,11 @@ class Concurso:
             return -1
         elif banda1.total < banda2.total:
             return 1
+        if banda1.puntajes["ritmo"] > banda2.puntajes["ritmo"]:
+            return -1
+        elif banda1.puntajes["ritmo"] < banda2.puntajes["ritmo"]:
+            return 1
+
 
 
 
