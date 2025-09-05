@@ -96,6 +96,23 @@ class Concurso:
             return -1
         elif banda1.puntajes["ritmo"] < banda2.puntajes["ritmo"]:
             return 1
+        if banda1.puntajes["uniformidad"] > banda2.puntajes["uniformidad"]:
+            return -1
+        elif banda1.puntajes["uniformidad"] < banda2.puntajes["uniformidad"]:
+            return 1
+        if banda1.puntajes["coreografia"] > banda2.puntajes["coreografia"]:
+            return -1
+        elif banda1.puntajes["coreografia"] < banda2.puntajes["coreografia"]:
+            return 1
+        if banda1.puntajes["alineacion"] > banda2.puntajes["alineacion"]:
+            return -1
+        elif banda1.puntajes["alineacion"] < banda2.puntajes["alineacion"]:
+            return 1
+        if banda1.puntajes["puntualidad"] > banda2.puntajes["puntualidad"]:
+            return -1
+        elif banda1.puntajes["puntualidad"] < banda2.puntajes["puntualidad"]:
+            return 1
+        return 0
 
 
 
