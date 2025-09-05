@@ -68,7 +68,6 @@ class BandaEscolar(Participante):
             return f"{info_base} - Puntaje: {self.total}"
         return f"{info_base} ({self.categoria}) - SIN EVALUAR"
 
-
 class Concurso:
     def __init__(self, nombre_concurso, fecha):
         self.nombre_concurso = nombre_concurso
