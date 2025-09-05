@@ -25,7 +25,7 @@ class BandaEscolar(Participante):
     def registrar_puntajes(self, puntajes_dict):
         criterios_recibidos = list(puntajes_dict.keys())
         if len(criterios_recibidos) != len(self.CRITERIOS):
-            raise ValueError(f"Debe proporcionar puntajes para todos los criterios: {self.CRITERIOS}")
+            raise ValueError(f"Debe proporcionar puntajes para todos los criterios")
 
         for criterio in self.CRITERIOS:
             if criterio not in criterios_recibidos:
@@ -53,10 +53,10 @@ class BandaEscolar(Participante):
     def fue_evaluada(self):
         return bool(self._puntajes)
     def mostrar_info(self):
-        info_base = f"{self.nombre} - {self.institucion} ({self.categoria})"
+        info_base = super().mostrar_info()
         if self.fue_evaluada():
             return f"{info_base} - Puntaje: {self.total}"
-        return info_base
+        return f"{info_base} ({self.categoria}) - SIN EVALUAR"
 class Concurso:
     def __init__(self, nombre_concurso, fecha):
         self.nombre_concurso = nombre_concurso
@@ -87,6 +87,12 @@ class Concurso:
             else:
                 print(f"{info} (Sin evaluar)")
             print()
+    def comparar(self, banda1, banda2):
+        if banda1.total > banda2.total:
+            return -1
+        elif banda1.total < banda2.total:
+            return 1
+
 
 
 
