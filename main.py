@@ -136,3 +136,40 @@ class Concurso:
         print(f"\n--- RANKING FINAL - {self.nombre_concurso} ---")
         for i, banda in enumerate(ranking, 1):
             print(f"{i}°. {banda.mostrar_info()}")
+#ACA VOY A HACER EL CONCURSO SOLICITADO CON LA INFO QUE NOS DIERON.
+concurso = Concurso("Concurso de Bandas - 15 de Septiembre", "2025-09-15")
+try:
+    banda1 = BandaEscolar("Liceo Xela", "Liceo Guatemala", "Básico")
+    banda2 = BandaEscolar("Estrella Infantil", "Escuela La Esperanza", "Primaria")
+    banda3 = BandaEscolar("Águilas del Occidente", "Colegio La Patria Occidente", "Diversificado")
+    print(concurso.inscribir_banda(banda1))
+    print(concurso.inscribir_banda(banda2))
+    print(concurso.inscribir_banda(banda3))
+    puntajes_banda1 = {
+        "ritmo": 9,
+        "uniformidad": 8,
+        "coreografia": 7,
+        "alineacion": 8,
+        "puntualidad": 10
+    }
+    puntajes_banda2 = {
+        "ritmo": 8,
+        "uniformidad": 9,
+        "coreografia": 8,
+        "alineacion": 7,
+        "puntualidad": 9
+    }
+    puntajes_banda3 = {
+        "ritmo": 10,
+        "uniformidad": 9,
+        "coreografia": 9,
+        "alineacion": 8,
+        "puntualidad": 10
+    }
+    print(concurso.registrar_evaluacion("Liceo Xela", puntajes_banda1))
+    print(concurso.registrar_evaluacion("Estrella Infantil", puntajes_banda2))
+    print(concurso.registrar_evaluacion("Águilas del Occidente", puntajes_banda3))
+    concurso.listar_bandas()
+    concurso.mostrar_ranking()
+except ValueError as e:
+    print(f"Error: {e}")
