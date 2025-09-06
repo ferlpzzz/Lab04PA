@@ -191,3 +191,25 @@ try:
     concurso.mostrar_ranking()
 except ValueError as e:
     print(f"Error: {e}")
+
+import tkinter as tk
+from tkinter import messagebox
+
+class ConcursoBandasApp:
+    def __init__(self):
+        self.ventana = tk.Tk()
+        self.ventana.title("Concurso de Bandas - Quetzaltenango")
+        self.ventana.geometry("500x300")
+
+        self.concurso = Concurso("Concurso de Bandas - 15 de Septiembre", "2025-09-15")
+
+        self.menu()
+
+        tk.Label(
+            self.ventana,
+            text="Sistema de Inscripción y Evaluación de Bandas Escolares\nConcurso 15 de Septiembre - Quetzaltenango",
+            font=("Arial", 12, "bold"),
+            justify="center"
+        ).pack(pady=50)
+
+        self.ventana.mainloop()
