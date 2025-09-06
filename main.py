@@ -306,3 +306,53 @@ class ConcursoBandasApp:
                 messagebox.showerror("Error", str(e))
 
         tk.Button(ventana_eval, text="Registrar Evaluación", command=guardar_evaluacion).pack(pady=15)
+
+    def listar_bandas(self):
+            ventana_listado = tk.Toplevel(self.ventana)
+            ventana_listado.title("Listado de Bandas")
+            ventana_listado.geometry("500x400")
+
+            tk.Label(ventana_listado, text="Listado de Bandas", font=("Arial", 14, "bold")).pack(pady=10)
+
+            frame = tk.Frame(ventana_listado)
+            frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+            if not self.concurso.bandas:
+                tk.Label(frame, text="No hay bandas inscritas", fg="red").pack()
+                return
+
+            for nombre, banda in self.concurso.bandas.items():
+                # Etiqueta principal con información de la banda
+                info_banda = banda.mostrar_info()
+                lbl_banda = tk.Label(frame, text=info_banda, font=("Arial", 10, "bold"))
+                lbl_banda.pack(anchor="w", pady=5)
+
+                if banda.fue_evaluada():
+                    for criterio, puntaje in banda.puntajes.items():
+                        lbl_puntaje = tk.Label(frame, text=f"  {criterio.capitalize()}: {puntaje}", font=("Arial", 9))
+                        lbl_puntaje.pack(anchor="w")
+
+                separator = tk.Frame(frame, height=2, bd=1, relief=tk.SUNKEN)
+                separator.pack(fill=tk.X, pady=5)
+
+    def ver_ranking(self):
+            ventana_ranking = tk.Toplevel(self.ventana)
+            ventana_ranking.title("Ranking Final")
+            ventana_ranking.geometry("400x300")
+
+            tk.Label(ventana_ranking, text="Ranking Final", font=("Arial", 14, "bold")).pack(pady=10)
+
+            frame = tk.Frame(ventana_ranking)
+            frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+            ranking = self.concurso.rankear()
+            if not ranking:
+                tk.Label(frame, text="No hay bandas evaluadas para generar ranking", fg="red").pack()
+                return
+
+            for i, banda in enumerate(ranking, 1):
+                lbl_ranking = tk.Label(frame, text=f"{i}°. {banda.mostrar_info()}", font=("Arial", 10))
+                lbl_ranking.pack(anchor="w", pady=2)
+
+if __name__ == "__main__":
+    app = ConcursoBandasApp()
