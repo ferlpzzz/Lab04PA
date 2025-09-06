@@ -225,3 +225,84 @@ class ConcursoBandasApp:
         opciones.add_command(label="Salir", command=self.ventana.quit)
         barra.add_cascade(label="Opciones", menu=opciones)
         self.ventana.config(menu=barra)
+
+    def inscribir_banda(self):
+        ventana_inscribir = tk.Toplevel(self.ventana)
+        ventana_inscribir.title("Inscribir Banda")
+        ventana_inscribir.geometry("400x350")
+
+        tk.Label(ventana_inscribir, text="Inscribir Banda", font=("Arial", 14, "bold")).pack(pady=10)
+
+        tk.Label(ventana_inscribir, text="Ingrese el nombre de la banda: ").pack(pady=5)
+        entrada_nombre = tk.Entry(ventana_inscribir, width=30)
+        entrada_nombre.pack(pady=5)
+
+        tk.Label(ventana_inscribir, text="Ingrese la institución: ").pack(pady=5)
+        entrada_institucion = tk.Entry(ventana_inscribir, width=30)
+        entrada_institucion.pack(pady=5)
+
+        tk.Label(ventana_inscribir, text="Ingrese la categoría de la banda (Primaria, Básico, Diversificado): ").pack(
+            pady=5)
+        entrada_categoria = tk.Entry(ventana_inscribir, width=30)
+        entrada_categoria.pack(pady=5)
+
+        def guardar_banda():
+            nombre = entrada_nombre.get().strip()
+            institucion = entrada_institucion.get().strip()
+            categoria = entrada_categoria.get().strip()
+
+            try:
+                banda = BandaEscolar(nombre, institucion, categoria)
+                resultado = self.concurso.inscribir_banda(banda)
+                messagebox.showinfo("Éxito", resultado)
+                ventana_inscribir.destroy()
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
+
+        tk.Button(ventana_inscribir, text="Inscribir Banda", command=guardar_banda).pack(pady=15)
+
+    def registrar_evaluacion(self):
+        if not self.concurso.bandas:
+            messagebox.showinfo("Información", "No hay bandas inscritas para evaluar")
+            return
+
+        ventana_eval = tk.Toplevel(self.ventana)
+        ventana_eval.title("Registrar Evaluación")
+        ventana_eval.geometry("450x500")
+
+        tk.Label(ventana_eval, text="Registrar Evaluación", font=("Arial", 14, "bold")).pack(pady=10)
+
+        tk.Label(ventana_eval, text="Seleccione la banda:").pack(pady=5)
+        bandas_names = list(self.concurso.bandas.keys())
+        selected_banda = tk.StringVar(ventana_eval)
+        selected_banda.set(bandas_names[0] if bandas_names else "")
+        opciones_banda = tk.OptionMenu(ventana_eval, selected_banda, *bandas_names)
+        opciones_banda.pack(pady=5)
+
+        criterios = BandaEscolar.CRITERIOS
+        entries = {}
+
+        for criterio in criterios:
+            tk.Label(ventana_eval, text=f"Ingrese puntos para {criterio} (0-10):").pack(pady=2)
+            entry = tk.Entry(ventana_eval, width=10)
+            entry.pack(pady=2)
+            entries[criterio] = entry
+
+        def guardar_evaluacion():
+            nombre_banda = selected_banda.get()
+            puntajes = {}
+
+            try:
+                for criterio, entry in entries.items():
+                    puntaje = int(entry.get())
+                    if not (0 <= puntaje <= 10):
+                        raise ValueError(f"Puntaje para {criterio} debe estar entre 0 y 10")
+                    puntajes[criterio] = puntaje
+
+                resultado = self.concurso.registrar_evaluacion(nombre_banda, puntajes)
+                messagebox.showinfo("Éxito", resultado)
+                ventana_eval.destroy()
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
+
+        tk.Button(ventana_eval, text="Registrar Evaluación", command=guardar_evaluacion).pack(pady=15)
